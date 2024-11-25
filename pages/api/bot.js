@@ -3,18 +3,19 @@ import {handleStart} from '../../handlers/startHandler';
 import { handlePhoneCommand } from '../../handlers/phoneCommand';
 import { handleContact } from '../../handlers/contactHandler';
 import { handleChargingStationsList } from '../../handlers/stationsHandler';
+import { handleChatId } from '../../handlers/chatIDHandler';
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(botToken, { polling: true });
 
 // Обработка команды /phone
-bot.onText(/\/start/, (msg) => handleStart(bot, msg));
+bot.onText(/\/start/, async(msg) => handleStart(bot, msg));
 
 // Обработка команды /phone
-bot.onText(/\/phone/, (msg) => handlePhoneCommand(bot, msg));
+bot.onText(/\/phone/, async(msg) => handlePhoneCommand(bot, msg));
 
 // Обработка контактов
-bot.on('contact', (msg) => handleContact(bot, msg));
+bot.on('contact', async(msg) => handleContact(bot, msg));
 
 // Обработчик команды /stations
 bot.onText(/\/stations/, async (msg) => handleChargingStationsList(bot, msg));
@@ -24,6 +25,9 @@ bot.onText(/\/stations/, async (msg) => handleChargingStationsList(bot, msg));
 //  const chatId = msg.chat.id;
 //  bot.sendMessage(chatId, `Hello, ${msg.from.first_name || 'friend'}! Вы сказали: "${msg.text}`);
 // });
+  
+
+bot.onText(/\/chatId/, (msg) => { handleChatId(bot, msg);});
 
 export default function handler(req, res) {
   res.status(200).json({ message: 'Telegram bot is running' });
