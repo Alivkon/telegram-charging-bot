@@ -4,6 +4,7 @@ import { handlePhoneCommand } from '../../handlers/phoneCommand';
 import { handleContact } from '../../handlers/phoneHandler';
 import { handleChargingStationsList } from '../../handlers/stationsHandler';
 import { handleChatId } from '../../handlers/chatIDHandler';
+import {handleRegistration} from '../../handlers/registrationHandler';
 import fs from 'fs/promises'; // Для работы с файлами
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -22,6 +23,8 @@ bot.on('contact', async(msg) => handleContact(bot, msg));
 bot.onText(/\/stations/, async (msg) => handleChargingStationsList(bot, msg));
 
 bot.onText(/\/chatId/, (msg) => { handleChatId(bot, msg);});
+
+bot.onText(/\/registration/, async (msg) => handleRegistration(bot, msg));
 // Общий обработчик для других сообщений
 // bot.on('message', (msg) => {
 //  const chatId = msg.chat.id;
