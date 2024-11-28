@@ -5,9 +5,9 @@ import { handleContact } from '../../handlers/phoneHandler';
 import { handleChargingStationsList } from '../../handlers/stationsHandler';
 import { handleChatId } from '../../handlers/chatIDHandler';
 import {handleRegistration} from '../../handlers/registrationHandler';
-import fs from 'fs/promises'; // Для работы с файлами
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
+
 const bot = new TelegramBot(botToken, { polling: true });
 
 // Обработка команды /phone

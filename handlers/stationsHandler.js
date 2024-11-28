@@ -1,5 +1,7 @@
+
 export async function handleChargingStationsList(bot, msg) {
 const chatId = msg.chat.id;
+const itChargeAPIToken = process.env.ITCHARGE_API_TOKEN;
 
 // Информируем пользователя, что начинается запрос
 bot.sendMessage(chatId, 'Запрашиваю данные с сервера...');
@@ -21,7 +23,7 @@ const response = await fetch('https://api.testing.itcharge.ru/graphql/cp', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'authorization': "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzZjk4MDhiMS00MTA5LTQ4NzAtOTM4My1iOWYyNWM0Nzk4NmQiLCJ0ZW5hbnQiOiJpdGNoYXJnZSIsInRlbmFudFNldHRpbmdzIjp7ImZlYXR1cmVCYWxhbmNlIjp0cnVlLCJjb3VudHJ5IjoiUlUiLCJwYXltZW50U2VydmljZSI6Inlvb2thc3NhIn0sImNvbXBhbnlJZCI6ImIzNzE4NmYzLTlmMzMtNDExZC05ZTUzLWQwZDMxZWMyZDhkYyIsImNvbXBhbnlUeXBlIjoiQ2hhcmdpbmcgU3RhdGlvbiBPcGVyYXRpb24iLCJlbWFpbCI6ImFsZXh0ZXN0aW5nQHRlc3RpbmcuY29tIiwicGhvbmUiOiIrNzc3Nzc3Nzc5OTAiLCJyb2xlIjoiU3VwZXIgQWRtaW4iLCJpYXQiOjE3MzAyODc4MDIsImV4cCI6MTgxNjY4NzgwMiwiYXVkIjoiYXBpLml0Y2hhcmdlLnJ1IiwiaXNzIjoiYXBpLml0Y2hhcmdlLnJ1In0.McDqVZNQDXaeelEwpKmGVwljuIYeenQn583ft9HixLnIb7FOVQB8aiu5fI-0quKR8ilGWLClepLIGaZco6lskQ",
+    'authorization': itChargeAPIToken
   },
   body: JSON.stringify({
     query: query,
