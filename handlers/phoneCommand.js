@@ -19,8 +19,8 @@ export function handlePhoneCommand(bot, msg) {
   }
 }
 
-// Обработка контакта пользователя
-export function handleContact(bot, msg) {
+//Обработка контакта пользователя
+export function handlePhone(bot, msg) {
   const chatId = msg.chat.id;
 
   // Проверяем, что сообщение содержит контакт
@@ -30,6 +30,6 @@ export function handleContact(bot, msg) {
 
     bot.sendMessage(chatId, `Спасибо, ${firstName}! Мы получили ваш номер телефона: ${phoneNumber}`);
 
-    // Логика обработки номера телефона (например, сохранение в базу данных)
+    
   }
 }

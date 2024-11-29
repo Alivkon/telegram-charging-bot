@@ -7,7 +7,7 @@ const db = new sqlite3.Database("./database.sqlite", (err) => {
   if (err) {
     console.error("Ошибка подключения к базе данных пользователей:", err.message);
   } else {
-    console.log("Подключение к базе данных пользователей установлено.");
+    console.log("Подключение phone к базе данных пользователей установлено.");
   }
 });
 
@@ -23,7 +23,7 @@ db.run(`
 
 export async function handleContact(bot, msg) {
   const chatId = msg.chat.id;
- const phoneNumber = msg.contact.phone_number;
+  const phoneNumber = msg.contact.phone_number;
   if (msg.contact) {
    } else {
      bot.sendMessage(chatId, "Не удалось получить номер телефона.");

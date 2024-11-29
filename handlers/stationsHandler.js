@@ -1,16 +1,73 @@
+import sqlite3 from "sqlite3";
+//import { open } from "sqlite3";
 
 export async function handleChargingStationsList(bot, msg) {
-const chatId = msg.chat.id;
-const itChargeAPIToken = process.env.ITCHARGE_API_TOKEN;
+
+  const chatId = msg.chat.id;
+
+console.log(chatId);
+
+
+
+
+
+
+    
+// Создаем или подключаемся к базе данных
+const db = new sqlite3.Database("./database.sqlite", (err) => {
+  if (err) {
+    console.error("Ошибка подключения к базе данных пользователей:", err.message);
+  } else {
+    console.log("Подключение station к базе данных пользователей установлено.");
+  }
+});
+
+// Создаем таблицу, если она еще не существует
+db.run(`
+  CREATE TABLE IF NOT EXISTS users (
+    phone_number TEXT PRIMARY KEY, 
+    chat_id INTEGER NOT NULL,
+    token TEXT
+    customerId TEXT
+  )
+`);
+
+    // Запрос для получения токена по номеру телефона
+    const row = await new Promise((resolve, reject) => {
+      db.get("SELECT * FROM users WHERE chat_id = ?", chatId, (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+    let token;
+    if (row && row.token) {
+      token = row.token; // Сохраняем токен в переменную
+      console.log(`Токен для ${chatId}: ${token}`);
+      bot.sendMessage(chatId, `Токен для чата ${chatId}: ${token}`);
+    } else {
+      console.log(`Токен для  ${chatId} не найден.`);
+      return null;
+    }
+    
+    // Закрываем соединение с базой данных
+    db.close((err) => {
+      if (err) {
+        console.error("Ошибка закрытия базы данных:", err.message);
+      } else {
+        console.log("Соединение с базой данных успешно закрыто.");
+      }
+    });
 
 // Информируем пользователя, что начинается запрос
-bot.sendMessage(chatId, 'Запрашиваю данные с сервера...');
+//bot.sendMessage(chatId, 'Запрашиваю данные с сервера...');
 
   const query = `
     {
       ChargingStationsList(page: {size: 5, number: 1}),
         {
-        count
         rows {
           id
           name
@@ -23,14 +80,14 @@ const response = await fetch('https://api.testing.itcharge.ru/graphql/cp', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'authorization': itChargeAPIToken
+    'authorization': `Bearer ${token}`,
   },
   body: JSON.stringify({
     query: query,
   }),
 });
-console.log(response);
-// Проверяем, есть ли ответ вообще
+  console.log(response);
+  // Проверяем, есть ли ответ вообще
   if (!response) {
     throw new Error('Не удалось получить ответ от сервера.');
   }
@@ -73,6 +130,6 @@ console.log(response);
   if (message.length > 4096) {
     bot.sendMessage(chatId, "Ответ слишком длинный для отправки. Попробуйте запросить меньший объем данных.");
   } else {
-    bot.sendMessage(chatId, message);
+    bot.sendMessage(chatId, `Доступные Вам зарядные станции: \n${message}`);
   } 
 } 

@@ -1,3 +1,4 @@
+// Этот код сейчас не используется, функционал неренесён в phoneCommand.js
 const mainServerToken = process.env.ITCHARGE_API_MAIN_TOKEN;
 
 export async function handleRegistration(bot, msg) {
